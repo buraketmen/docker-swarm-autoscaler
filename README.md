@@ -34,8 +34,3 @@ deploy:
 | `swarm.autoscaler` | `true` | Required. This enables autoscaling for a service. Anything other than `true` will not enable it |
 | `swarm.autoscaler.minimum` | Integer | Optional. This is the minimum number of replicas wanted for a service. The autoscaler will not downscale below this number |
 | `swarm.autoscaler.maximum` | Integer | Optional. This is the maximum number of replicas wanted for a service. The autoscaler will not scale up past this number | 
-
-## Test
-You can deploy a test app with the following commands below. Helloworld is initially only 1 replica. The autoscaler will scale to the minimum 3 replicas.
-1. `docker stack deploy -c swarm-autoscaler-stack.yml autoscaler`
-2. `docker stack deploy -c helloworld.yml hello`
