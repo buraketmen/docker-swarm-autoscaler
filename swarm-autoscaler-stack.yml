@@ -8,12 +8,15 @@ configs:
     file: ./prometheus.yml
 
 services:
-  docker-swarm-autoscaler:
-    image: jcwimer/docker-swarm-autoscaler:0.1.0
+  autoscaler:
+    image: buraketmen/docker-swarm-autoscaler:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - PROMETHEUS_URL=http://prometheus:9090
+      - CPU_PERCENTAGE_UPPER_LIMIT=75
+      - CPU_PERCENTAGE_LOWER_LIMIT=25
+      - SLEEP_SECOND=30
     networks:
       - autoscale
     deploy:
@@ -22,15 +25,8 @@ services:
       placement:
         constraints:
           - node.role == manager
-      resources:
-        limits:
-          cpus: '0.10'
-          memory: 128M
-        reservations:
-          cpus: '0.10'
-          memory: 64M
   cadvisor:
-    image: google/cadvisor:${CADVISOR_VERSION:-v0.25.0}
+    image: google/cadvisor:v0.33.0
     networks:
       - autoscale
     volumes:
@@ -39,16 +35,8 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
     deploy:
       mode: global
-      resources:
-        limits:
-          cpus: '0.10'
-          memory: 128M
-        reservations:
-          cpus: '0.10'
-          memory: 64M
 
   prometheus:
     image: prom/prometheus:v2.12.0
@@ -64,10 +52,3 @@ services:
       placement:
         constraints:
           - node.role == manager
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 1024M
-        reservations:
-          cpus: '0.50'
-          memory: 128M

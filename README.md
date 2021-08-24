@@ -1,7 +1,5 @@
 # docker-swarm-autoscaler
 
-## Current Release: 0.1.0
-
 This project is intended to bring auto service staling to Docker Swarm. This script uses prometheus paired with cadvisor metrics to determine cpu usage. It then uses a manager node to determine if a service wants to be autoscaled and uses a manager node to scale the service.
 
 Currently the project only uses cpu to autoscale. If cpu usage reaches 85% the service will scale up, if it reaches 25% it will scale down.

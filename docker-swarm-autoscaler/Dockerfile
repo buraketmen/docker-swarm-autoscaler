@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 RUN apt-get update -qq \
   && apt-get install -y -qq \
@@ -9,10 +9,10 @@ RUN apt-get update -qq \
     software-properties-common \
     dnsutils \
   && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
-  && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable" \
+  && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" \
   && apt-get update -qq \
-  && apt-get install -y -qq \
-    docker-ce=5:19.03.5* \
+  && apt-cache policy docker-ce \
+  && apt-get install -y -qq docker-ce \
   && apt-get -qq clean \
   && apt-get autoremove -y \
   && rm -rf \

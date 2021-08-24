@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
 LOOP=${LOOP:='yes'}
-CPU_PERCENTAGE_UPPER_LIMIT=85
-CPU_PERCENTAGE_LOWER_LIMIT=25
+CPU_PERCENTAGE_UPPER_LIMIT=${CPU_PERCENTAGE_UPPER_LIMIT:=75}
+CPU_PERCENTAGE_LOWER_LIMIT=${CPU_PERCENTAGE_LOWER_LIMIT:=25}
+SLEEP_SECOND=${SLEEP_SECOND:=30}
 PROMETHEUS_API="api/v1/query?query="
 PROMETHEUS_QUERY="sum(rate(container_cpu_usage_seconds_total%7Bcontainer_label_com_docker_swarm_task_name%3D~%27.%2B%27%7D%5B5m%5D))BY(container_label_com_docker_swarm_service_name%2Cinstance)*100"
 
@@ -108,7 +110,7 @@ main () {
 
 main
 while [[ $LOOP == 'yes' ]]; do
-  echo Waiting 60 seconds for the next test
-  sleep 60s
+  echo Waiting $SLEEP_SECOND seconds for the next test
+  sleep ${SLEEP_SECOND}s
   main
 done
